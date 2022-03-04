@@ -113,6 +113,7 @@ yappBack        = 10;
 yappCenter      = 11;
 yappSymmetric   = 12;
 yappAllCorners  = 13;
+yappOffset      = 14;
 
 //-------------------------------------------------------------------
 
@@ -976,7 +977,17 @@ module cutoutsInXY(type)
       //-- [5] yappCenter
       for ( cutOut = setCutoutArray(type) )
       {
-        if (cutOut[4]==yappRectangle && cutOut[5]!=yappCenter)  // org pcb_x/y
+        if (cutOut[4]==yappRectangle && cutOut[5]==yappOffset)  // org pcb_x/y
+        {
+          posx=pcbX+cutOut[0];
+          posy=pcbY+cutOut[1];
+          translate([posx, posy, zPos])
+            translate([cutOut[6], cutOut[7], 0])
+              rotate([0, 0, cutOut[8]])
+                translate([-cutOut[6], -cutOut[7], 0])
+                  cube([cutOut[3], cutOut[2], thickness]);
+        }
+        else if (cutOut[4]==yappRectangle && cutOut[5]!=yappCenter)  // org pcb_x/y
         {
           posx=pcbX+cutOut[0];
           posy=pcbY+cutOut[1];
